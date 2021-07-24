@@ -2,22 +2,24 @@
 #define CLOSED_LOOP_H_
 #include "main.h"
 #define INTERGAL_ERROR_TOLERANCE 3
+#define SETTLED_TOLERANCE 1.5f
 
 
 class ClosedLoop{
     protected: 
-        int sign(int x); 
 
         char control_mode; 
 
-        float kp, ki, kd, ls, power; 
+        float kp, ki, kd, ls, power, heading_error, heading_multiplier; 
         
         int integral, deriv, p_power, i_power, d_power, i_bound, accel_step; 
 
-        bool using_heading_correction, using_slew_rate; 
+        bool using_heading_correction, using_slew_rate, settled; 
 
 
     public: 
+        static int sign(int x); 
+
         ClosedLoop(float kp, float ki, float kd, float ls, char state='L'); //DONE
         
         void set_constants(float _kp, float _kd, float _ki, float _ls); 
@@ -30,7 +32,7 @@ class ClosedLoop{
 
         void set_heading_multiplier(float heading_multi); 
 
-        void set_heading_value(float offset_value); 
+        void set_heading_value(float error); 
 
         bool get_heading_state() const; 
 

@@ -1,5 +1,6 @@
 #include "main.h"
 #include "../../include/RAJA/controllers/Closed-Loop-Controller.h"
+#include <iostream>
 
 ClosedLoop::ClosedLoop(float kp, float ki, float kd, float ls, char state):
                        kp(kp), ki(ki), kd(kd), ls(ls), control_mode(state){}
@@ -38,6 +39,10 @@ float ClosedLoop::get_calculated_power(int set_point, float sensor_value){
     int delta_error = (set_point - sensor_value) - error; 
     d_power = kd * delta_error; 
 
+    if(abs(delta_error) < SETTLED_TOLERANCE){
+        settled = true; 
+    } 
+
     if(using_slew_rate && abs(delta_error) > accel_step){
         power += (sign(p_power) * ls); 
     }
@@ -48,3 +53,26 @@ float ClosedLoop::get_calculated_power(int set_point, float sensor_value){
     return power; 
 }
 
+void ClosedLoop::set_heading_state(bool heading_state){
+    using_heading_correction = heading_state; 
+}
+
+void ClosedLoop::set_heading_multiplier(float heading_multi){
+    heading_multiplier = heading_multi; 
+}
+
+void ClosedLoop::set_heading_value(float error){
+    heading_error = error; 
+}
+
+bool ClosedLoop::get_heading_state() const{
+    return using_heading_correction; 
+}
+
+char ClosedLoop::get_mode() const{
+    return control_mode; 
+}
+
+bool ClosedLoop::has_settled() const{
+    return settled; 
+}
