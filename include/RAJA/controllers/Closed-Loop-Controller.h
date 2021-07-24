@@ -20,7 +20,7 @@ class ClosedLoop{
     public: 
         static int sign(int x); 
 
-        ClosedLoop(float kp, float ki, float kd, float ls, char state='L'); //DONE
+        ClosedLoop(float kp, float ki, float kd, float ls, char state='L'); 
         
         void set_constants(float _kp, float _kd, float _ki, float _ls); 
 

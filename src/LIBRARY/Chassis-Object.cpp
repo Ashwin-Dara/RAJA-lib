@@ -27,6 +27,11 @@ void ChassisObject::move_right_side (int voltage){
     lDrive2->move(voltage);
 }
 
+void ChassisObject::move(int voltage){
+    move_right_side(voltage); 
+    move_left_side(voltage);
+}
+
 // NEED TO PASS IN THE CHASSIS OBJECT THROUGH REFERENCE 
 
 /* SAMPLE USAGE 

@@ -12,12 +12,14 @@ class ChassisObject{
         ChassisObject(const pros::Motor &m1, const pros::Motor &m2, 
                       const pros::Motor &m3, const pros::Motor &m4);
 
-         void move_right_side (int voltage); 
+         void move_right_side(int voltage); 
 
-         void move_left_side (int voltage); 
+         void move_left_side(int voltage); 
+
+         void move(int voltage); 
 }; 
 
-void move_chassis_model(const ChassisObject &drive); 
+// void move_chassis_model(const ChassisObject &drive); 
 
 /*
 void absolute_move_to(const ChassisObject &drive, const ClosedLoop &controller, float sensor_value, int set_point, int timeout=0){
