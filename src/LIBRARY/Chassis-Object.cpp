@@ -32,7 +32,7 @@ void ChassisObject::move_right_side (int voltage){
 /* SAMPLE USAGE 
 
 ChassisObject drive1(rightMotor, rightMotor2, leftMotor, leftMotor2); 
-ClosedLoop pid1(0.18, 0.01, 0.05, 2, 'C');
+ClosedLoop pid1(0.18, 0.01, 0.05, 2, 'T');
 
 move_to_point(drive1, pid1, imu.get_position(), 90);
 
