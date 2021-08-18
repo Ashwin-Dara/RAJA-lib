@@ -6,8 +6,13 @@ std::shared_ptr<pros::Motor> r_m, l_m;
 std::shared_ptr<pros::Rotation> r_odom, l_odom; 
 
 PositionTracking::PositionTracking(){
-    x_coord = y_coord = theta = 0; 
+    x_coord = y_coord = theta = track_length = wheel_size = 0; 
     tracking_flag = using_the_imu = using_rotation_sensor = using_integrated_enc = false; 
+}
+
+void PositionTracking::set_drive_configuration(float _track_length, float _wheel_size){
+    track_length = _track_length; 
+    wheel_size = _wheel_size; 
 }
 
 

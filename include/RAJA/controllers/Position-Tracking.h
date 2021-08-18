@@ -17,14 +17,19 @@ extern std::shared_ptr<pros::Rotation> r_odom, l_odom;
 
 class PositionTracking{
     private: 
-        float x_coord, y_coord, theta, track_length; 
+        float track_length, wheel_size; 
+
+        float x_coord, y_coord, theta; 
+
         bool using_the_imu, using_rotation_sensor, using_integrated_enc; 
-        bool tracking_flag; // flag will control position tracking while loop in "PositionTrc"
+        
+        bool tracking_flag; // flag will control position tracking while loop in the "begin_tracking" function
          
     public: 
         PositionTracking(); 
 
-        void set_track_length(float track_length); 
+        // all of the measurements will be converted and consistent with inches
+        void set_drive_configuration(float track_length, float wheel_size = 4.0); 
 
         void set_imu(const pros::IMU &imu);
 
