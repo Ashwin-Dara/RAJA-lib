@@ -15,7 +15,6 @@ pros::IMU main_imu(20);
 pros::Rotation right_encoder(1); 
 pros::Rotation left_encoder(2); 
 
-
 PositionTracking drive1; 
 drive1.set_encoders(right_encoder, left_encoder); 
 drive1.set_imu(main_imu); 
