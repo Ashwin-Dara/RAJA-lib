@@ -20,32 +20,24 @@ void PositionTracking::begin_tracking(){
     }
 
     while(tracking_flag){
-        float delta_s, delta_theta, delta_r, delta_l; 
-        float curr_s, curr_theta, curr_r, curr_l; 
-        
+        float curr_s_right, curr_s_left, curr_theta; 
+        float delta_s_right, delta_s_left, delta_theta; 
+
         curr_theta = (using_the_imu) ? _odom_imu->get_rotation() : 0; 
-        
+        curr_s_right = (using_rotation_sensor) ? r_odom->get_position() : r_m->get_position(); 
+        curr_s_left = (using_rotation_sensor) ? l_odom->get_position() : l_m->get_position(); 
 
-        if(using_the_imu) {
+        pros::delay(25);
 
-            curr_theta
+        delta_s_right = (using_rotation_sensor) ? curr_s_right - r_odom->get_position() : curr_s_right - r_m->get_position(); 
+        delta_s_left = (using_rotation_sensor) ? curr_s_left - l_odom->get_position() : curr_s_left - l_m->get_position(); 
+        delta_theta = (using_the_imu) ? _odom_imu->get_rotation() - curr_theta : curr_theta + ((delta_s_right - delta_s_left) / (2 * track_length)); 
 
-        }
-        else{
-
-        }
-
-        if(using_rotation_sensor){
-
-        } 
-        else{
-
-        }
-
-
-
+        float delta_s = (delta_s_left + delta_s_right) / 2; 
+        x_coord += delta_s * std::cos(theta + (delta_theta/2));
+        y_coord += delta_s * std::sin(theta + (delta_theta/2));
+        theta += delta_theta; 
     }
-
 }
 
 void PositionTracking::stop_tracking(){
