@@ -365,11 +365,12 @@ code {
           : 'default'
     });
   </script>
-<h2 id="usage-of-the-position-tracking-class">Usage of the Position Tracking Class</h2>
-<p>Steps to using the Position Tracking Class</p>
+<h1 id="usage-of-the-position-tracking-class">Usage of the Position Tracking Class</h1>
+<h2 id="steps-to-using-the-position-tracking-class-with-an-imu">Steps to using the Position Tracking Class WITH AN IMU</h2>
 <ol>
 <li>Create an instance of the class</li>
 <li>Configure the sensors you wish to use by using the functions &quot;set_imu&quot; &quot;set_encoders&quot; &quot;set_motors&quot;</li>
+<li>Set the Drive Configurations. If you are using an IMU it actually doesn't matter what the first argument of 'set_drive_configurations' is.</li>
 <li>Have a function that contains the PositionTracking::begin_tracking() method. The reason for this is that you will be putting the outer function into a task.</li>
 </ol>
 <br>
@@ -382,6 +383,8 @@ pros::Rotation left_encoder(2);
 PositionTracking drive1; 
 drive1.set_encoders(right_encoder, left_encoder); 
 drive1.set_imu(main_imu); 
+drive1.set_drive_configurations(15, 4);
+
 
 void tracking_wrapper(void*){
     drive1.begin_tracking(); 
@@ -390,6 +393,33 @@ void tracking_wrapper(void*){
 void autonomous(){
     pros::Task position_tracking_task(tracking_wrapper); 
     pros::delay(1000); 
+
+    cout &lt;&lt; &quot;The Position of the Robot is: &quot; &lt;&lt; drive1.get_x() &lt;&lt; &quot;  &quot; &lt;&lt; drive1.get_y() &lt;&lt; &quot;  &quot; &lt;&lt; drive1.get_theta() &lt;&lt;  std::endl; 
+}
+
+</div></code></pre>
+<br>
+<h2 id="using-the-position-tracking-class-without-an-imu">Using the Position Tracking Class without an IMU</h2>
+<ol>
+<li>The procedure is the exact same as the previous all we need to do is have an additional configuration for the track length of the drive</li>
+<li>The track length is the distance from the right set of wheels and the left set of wheels (in inches). Moreover, we need to set the wheel size.</li>
+</ol>
+<p>Here is the full example of the usage for if you are not using an IMU:<br>
+<br></p>
+<pre class="hljs"><code><div>pros::Motor right_motor(1);
+pros::Motor left_motor(2);
+
+PositionTracking drive1; 
+drive1.set_drive_configurations(15, 4);
+drive1.set_motors(right_motor, left_motor);
+
+void tracking_wrapper(void*){
+    drive1.begin_tracking(); 
+}
+
+void autonomous(){
+    pros::Task position_tracking_task(tracking_wrapper);
+    pros::delay(1000);
 
     cout &lt;&lt; &quot;The Position of the Robot is: &quot; &lt;&lt; drive1.get_x() &lt;&lt; &quot;  &quot; &lt;&lt; drive1.get_y() &lt;&lt; &quot;  &quot; &lt;&lt; drive1.get_theta() &lt;&lt;  std::endl; 
 }
