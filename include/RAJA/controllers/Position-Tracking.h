@@ -31,9 +31,9 @@ class PositionTracking{
         // all of the measurements will be converted and consistent with inches
         void set_drive_configuration(float track_length, float wheel_size = 4.0); 
 
-        void set_imu(const pros::IMU &imu);
+        void set_imu(const pros::IMU &imu, int port);
 
-        void set_encoders(const pros::Rotation &r, const pros::Rotation &l);
+        void set_encoders(const pros::Rotation &r, const pros::Rotation &l, int right_port, int left_port);
 
         void set_motors(const pros::Motor &r, const pros::Motor &l);
 
@@ -48,7 +48,7 @@ class PositionTracking{
         float get_theta() const; 
 
         // Need to figure out the math for this later
-        int ticks_to_inches(int ticks);
+        float ticks_to_inches(float ticks);
 
         float deg_to_radian(float degs); 
 
