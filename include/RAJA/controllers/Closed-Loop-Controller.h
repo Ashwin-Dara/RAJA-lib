@@ -124,7 +124,6 @@ namespace RAJA{
             */
             bool has_settled() const; 
     };
-    
 }
 
 #endif
