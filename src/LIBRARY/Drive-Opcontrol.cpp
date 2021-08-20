@@ -2,7 +2,7 @@
 #include <iostream>
 #include "../../include/RAJA/usercontrol/Drive-Opcontrol.h"
 
-void tank_drive(pros::Controller &joystick, ChassisObject &drive){
+void tank_drive(pros::Controller &joystick, RAJA::ChassisObject &drive){
     int right_channel = joystick.get_analog(ANALOG_RIGHT_Y); 
     int left_channel = joystick.get_analog(ANALOG_LEFT_Y); 
 
@@ -17,7 +17,7 @@ void tank_drive(pros::Controller &joystick, ChassisObject &drive){
     else drive.move_left_side(0); 
 }
 
-void arcade_drive(pros::Controller &joystick, ChassisObject &drive){
+void arcade_drive(pros::Controller &joystick, RAJA::ChassisObject &drive){
     int right_channel = joystick.get_analog(ANALOG_RIGHT_Y);
     int left_x_channel = joystick.get_analog(ANALOG_LEFT_X); 
 

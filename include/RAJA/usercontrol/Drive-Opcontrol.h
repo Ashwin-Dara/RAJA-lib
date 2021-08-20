@@ -5,8 +5,8 @@
 #include "main.h"
 #include "../object/Chassis-Object.h"
 
-void tank_drive(pros::Controller &joystick, ChassisObject &drive);
+void tank_drive(pros::Controller &joystick, RAJA::ChassisObject &drive);
 
-void arcade_drive(pros::Controller &joystick, ChassisObject &drive); 
+void arcade_drive(pros::Controller &joystick, RAJA::ChassisObject &drive); 
 
 #endif

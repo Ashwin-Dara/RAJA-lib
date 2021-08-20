@@ -1,6 +1,8 @@
 #include "main.h"
 #include "../../include/RAJA/object/Chassis-Object.h"
 
+namespace RAJA{
+
 std::shared_ptr<pros::Motor> rDrive1, rDrive2, lDrive1, lDrive2; 
 
 ChassisObject::ChassisObject(const pros::Motor &m1, const pros::Motor &m2, 
@@ -32,6 +34,22 @@ void ChassisObject::move(int voltage){
     move_left_side(voltage);
 }
 
+
+ void absolute_move_to(ChassisObject &drive, ClosedLoop &controller, float sensor_value, int set_point, int timeout){
+        int manual_timeout = 0; 
+        while(!controller.has_settled() || (manual_timeout < timeout && manual_timeout > 0)){
+
+            drive.move_left_side(controller.get_calculated_power(set_point, timeout));
+            drive.move_right_side(controller.get_calculated_power(set_point, timeout));
+
+            pros::delay(25);
+            manual_timeout += 25; 
+        }
+    }
+
+    void relative_move_to(ChassisObject &drive, ClosedLoop &controller, float sensor_value, int set_point, int timeout){
+        absolute_move_to(drive, controller, sensor_value, set_point - sensor_value, timeout);
+    }
 // NEED TO PASS IN THE CHASSIS OBJECT THROUGH REFERENCE 
 
 /* SAMPLE USAGE 
@@ -43,3 +61,6 @@ move_to_point(drive1, pid1, imu.get_position(), 90);
 
 
 */
+
+
+}
