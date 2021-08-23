@@ -5,53 +5,79 @@
 #include <memory>
 #include <cmath>
 
-extern std::shared_ptr<pros::IMU> _odom_imu;
-extern std::shared_ptr<pros::Motor> r_m, l_m; 
-extern std::shared_ptr<pros::Rotation> r_odom, l_odom; 
-/* 
-    We want to have a insert chassis model function into a function in the PositionTracking class
-    Then, based on whatever is the model, we will create new sensors in particular for the odometry functions. 
+namespace RAJA{
+    /*
+    * These sensors will be used internally by the PositionTracking class. They will be configured by passing the original electronics. 
+    */
+    extern std::shared_ptr<pros::IMU> _odom_imu; // IMU sensor
 
-*/
-// Within the functions that set up the sensors to be used for odometry, we want to be able to 
+    extern std::shared_ptr<pros::Motor> r_m, l_m; // Integrated Motor Encoders
 
-class PositionTracking{
-    private: 
-        float track_length, wheel_size; 
+    extern std::shared_ptr<pros::Rotation> r_odom, l_odom; // Dedicated Rotation Sensors
 
-        float x_coord, y_coord, theta; 
+    class PositionTracking{
+        private: 
 
-        bool using_the_imu, using_rotation_sensor, using_integrated_enc; 
-        
-        bool tracking_flag; // flag will control position tracking while loop in the "begin_tracking" function
-         
-    public: 
-        PositionTracking(); 
+            /*
+            * These variables will be used within the position tracking equations. 
+            *
+            * In particular, this was the lecture that was used to construct the 'begin_tracking' function.
+            * Source: https://www.hmc.edu/lair/ARW/ARW-Lecture01-Odometry.pdf
+            *
+            * Summary: 
+            * The x position is given by (displacement) * ( cos(theta + ( change in theta / 2) ) )
+            * The y position is given by the same equation except that cosine is a sine. 
+            * Theta will be calculated likely through the IMU. 
+            *
+            * EVERYTHING WILL BE TRACKED IN INCHES
+            */
+            float track_length, wheel_size, x_coord, y_coord, theta; 
 
-        // all of the measurements will be converted and consistent with inches
-        void set_drive_configuration(float track_length, float wheel_size = 4.0); 
 
-        void set_imu(const pros::IMU &imu, int port);
+            /* 
+            * These flags determine what sensors the user is using.
+            */
+            bool using_the_imu, using_rotation_sensor, using_integrated_enc; 
+            
 
-        void set_encoders(const pros::Rotation &r, const pros::Rotation &l, int right_port, int left_port);
+            /* 
+            * This controls the 'begin_tracking' function's while loop. 
+            */
+            bool tracking_flag; 
 
-        void set_motors(const pros::Motor &r, const pros::Motor &l);
+        public: 
 
-        void begin_tracking(); 
+            /*
+            * Constructor initializes all the private variables, and sets them equal to 0. 
+            */
+            PositionTracking(); 
 
-        void stop_tracking(); 
+            /*
+            * Setting the track length of the drive alongside the wheel size. 
+            */
+            void set_drive_configuration(float track_length, float wheel_size = 4.0); 
 
-        float get_x() const; // GETTER FUNCTIONS
+            void set_imu(const pros::IMU &imu, int port);
 
-        float get_y() const; 
-        
-        float get_theta() const; 
+            void set_encoders(const pros::Rotation &r, const pros::Rotation &l, int right_port, int left_port);
 
-        // Need to figure out the math for this later
-        float ticks_to_inches(float ticks);
+            void set_motors(const pros::Motor &r, const pros::Motor &l);
 
-        float deg_to_radian(float degs); 
+            void begin_tracking(); 
 
-};
+            void stop_tracking(); 
+
+            float get_x() const; // GETTER FUNCTIONS
+
+            float get_y() const; 
+            
+            float get_theta() const; 
+
+            // Need to figure out the math for this later
+            float ticks_to_inches(float ticks);
+
+            float deg_to_radian(float degs); 
+    };
+}
 
 #endif
