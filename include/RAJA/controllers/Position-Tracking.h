@@ -80,8 +80,6 @@ namespace RAJA{
             * 2. Create a wrapper function that will contain the 'begin_tracking' method being called. 
             * 3. Create a task for that wrapper function. 
             * 
-            * Example Code: 
-            * 
             */
             void begin_tracking(); 
 
