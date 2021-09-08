@@ -3,43 +3,56 @@
 
 namespace RAJA{
     
+    // Sensors that will be used internally by RAJA lib
     std::shared_ptr<pros::IMU> _odom_imu;
     std::shared_ptr<pros::Motor> r_m, l_m; 
     std::shared_ptr<pros::Rotation> r_odom, l_odom; 
 
     PositionTracking::PositionTracking(){
+        // init all private variables
         x_coord = y_coord = theta = track_length = wheel_size = 0; 
         tracking_flag = using_the_imu = using_rotation_sensor = using_integrated_enc = false; 
     }
 
     void PositionTracking::set_drive_configuration(float _track_length, float _wheel_size){
+        // Setting differential drive configurations
         track_length = _track_length; 
         wheel_size = _wheel_size; 
     }
 
     void PositionTracking::set_imu(const pros::IMU &imu, int port){
+        // Configuring IMU sensor
         _odom_imu = std::make_shared<pros::IMU>(port);
     }
 
     void PositionTracking::set_encoders(const pros::Rotation &r, const pros::Rotation &l, int right_port, int left_port){
+        // Setting encoders
         r_odom = std::make_shared<pros::Rotation>(right_port); 
         l_odom = std::make_shared<pros::Rotation>(left_port);
     }
 
+
     void set_motors(const pros::Motor &r, const pros::Motor &l){
+        // Creating motors for internal use
         r_m = std::make_shared<pros::Motor>(r.get_port(), r.get_gearing(), r.is_reversed(), pros::E_MOTOR_ENCODER_DEGREES);
         l_m = std::make_shared<pros::Motor>(l.get_port(), l.get_gearing(), l.is_reversed(), pros::E_MOTOR_ENCODER_DEGREES);
     }
 
-    // THIS FUNCTION WILL COMPUTE THE COORDINATES BASED OON THE ODOEMTRY EQUATIONS 
-    // https://www.hmc.edu/lair/ARW/ARW-Lecture01-Odometry.pdf
+
+    /*
+    * Odometry equations are referenced from the following lecture
+    *
+    * https://www.hmc.edu/lair/ARW/ARW-Lecture01-Odometry.pdf
+    */
     void PositionTracking::begin_tracking(){
 
+        // If the tracking flag is false to begin with and the function is called, the tracking function will be true. 
         if(!tracking_flag) {
             tracking_flag = true; 
         }
 
-        while(tracking_flag){
+        while(tracking_flag){ 
+            // Odometry equations throughotu the whole while loop
             float curr_s_right, curr_s_left, curr_theta; 
             float delta_s_right, delta_s_left, delta_theta; 
 
