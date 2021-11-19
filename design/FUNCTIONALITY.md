@@ -44,7 +44,7 @@ motion_profile_move(drive, 1000, 1500); // valid
 }
 ```
 
-- Path Following: maybe something in the future? Have not planned how to implement this?
+- Path Following: Planned for sometime in the future.
 
 ### Driver Control 
     - Rising Edge Controller 
